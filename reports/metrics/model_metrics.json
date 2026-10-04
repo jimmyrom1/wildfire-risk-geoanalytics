@@ -1,0 +1,23 @@
+{
+  "clasificador_ocurrencia": {
+    "cv_f1_mean": 0.57,
+    "cv_f1_std": 0.021,
+    "test_accuracy": 0.602,
+    "test_precision": 0.61,
+    "test_recall": 0.667,
+    "test_f1": 0.637,
+    "test_roc_auc": 0.655,
+    "n_train": 410,
+    "n_test": 103
+  },
+  "regresor_severidad": {
+    "cv_mae_log_mean": 0.981,
+    "cv_mae_log_std": 0.07,
+    "test_mae_log_area": 1.136,
+    "test_rmse_log_area": 1.358,
+    "test_r2_log_area": -0.105,
+    "test_mae_hectareas": 17.43,
+    "n_train": 215,
+    "n_test": 54
+  }
+}

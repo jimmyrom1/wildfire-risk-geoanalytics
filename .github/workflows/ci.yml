@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: wildfire
+          POSTGRES_PASSWORD: wildfire
+          POSTGRES_DB: wildfire
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U wildfire"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      WILDFIRE_DB_DSN: postgresql+psycopg2://wildfire:wildfire@localhost:5432/wildfire
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Aplicar esquema PostGIS
+        run: |
+          sudo apt-get update && sudo apt-get install -y postgresql-client
+          psql "postgresql://wildfire:wildfire@localhost:5432/wildfire" -f sql/schema.sql
+
+      - name: Tests (incluye integración real contra PostGIS)
+        run: pytest -v
+
+      - name: EDA (genera figuras reales)
+        run: python -m analysis.eda
+
+      - name: Entrenamiento de modelos
+        run: python -m ml.train_model
+
+      - name: Cargar datos a PostGIS y validar consultas espaciales
+        run: |
+          python -m etl.load_to_postgres
+          psql "postgresql://wildfire:wildfire@localhost:5432/wildfire" -f sql/analysis_queries.sql

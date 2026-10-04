@@ -1,0 +1,11 @@
+{
+  "n_registros": 513,
+  "pct_incendios_sin_area_registrada": 47.6,
+  "mes_mas_destructivo": "sep",
+  "area_total_mes_mas_destructivo_ha": 3086.13,
+  "correlacion_temp_area": 0.098,
+  "correlacion_isi_area": 0.008,
+  "area_media_ha": 12.89,
+  "area_mediana_ha": 0.54,
+  "area_maxima_ha": 1090.84
+}
